@@ -1,0 +1,12 @@
+body{
+    background-color: darkgreen;
+    margin: 0;
+    padding: 0;
+    color: goldenrod;
+}
+button{
+    font-weight: 700;
+    font-size: larger;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
