@@ -33,6 +33,9 @@ window.onload = startGame()
 hitMeBtn.addEventListener('click', ()=>{
     renderCard(playerObj)
 })
+stayBtn.addEventListener('click', ()=>{
+    dealersTurn()
+})
 // 
 // functions 
 function startGame(){
@@ -94,7 +97,7 @@ function renderCard(player){
     player.total = aceHandler(player.total,aceCounter)
     totalCheck(player.total)
     console.log(win,lose)
-    playerObj.sumId.innerHTML = player.name + ' total: ' + player.total 
+    player.sumId.innerHTML = player.name + ' total: ' + player.total 
 }
 function createHtml(card){
     let html = `<img src="${card.imgUrl}"/>`
@@ -121,31 +124,18 @@ function totalCheck(playerTotal){
         return lose = true
     }
 }
-// function dealersTurn(){
-// //     setTimeout(()=>{
-// //       dealer.innerHTML = ''
-// //       dealerSum.innerHTML ='Dealer total: '
-// //       dealerTotal = 0
-// //       for (let i=0; i<dealerCards.length; i++){
-// //         dealer.innerHTML += createHtml(dealerCards[i])
-// //         dealerTotal += dealerCards[i].cardValue
-// //         aceCheck(dealerCards[i])
-// //     }
-// //     dealerSum.innerHTML += dealerTotal
-// // },1500)
-// //     while(dealerTotal < playerTotal && dealerTotal <= 21){
-// //         setTimeout((=>{
-// //             dealerCards.push(drawCard(deck))
-// //             let card = dealerCards.length -1
-// //             dealer.innerHTML += createHtml(dealerCards[card])
-// //             dealerTotal += dealerCards[card].cardValue
-// //             aceCheck(dealerCards[card])
-// //             dealerTotal = aceHndler(dealerTotal,aceCounter)
-// //             totalCheck(dealerTotal)
-// //             console.log(win,lose)
-// //             dealerSum.innerHTML = 'Dealer total: ' + dealerTotal
-// //         }),1500)
-// //     }      
-// }
-// 
-// 
+function dealersTurn(){
+      dealerObj.id.innerHTML = ''
+      dealerObj.sumId.innerHTML ='Dealer total: '
+      dealerObj.total = 0
+      for (let i=0; i<dealerObj.cards.length; i++){
+        dealerObj.id.innerHTML += createHtml(dealerObj.cards[i])
+        dealerObj.total += dealerObj.cards[i].cardValue
+        aceCheck(dealerObj.cards[i])
+    }
+    dealerObj.sumId.innerHTML += dealerObj.total
+    while(dealerObj.total < playerObj.total && dealerObj.total <= 21){
+        renderCard(dealerObj)
+   }    
+}
+
