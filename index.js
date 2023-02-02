@@ -17,6 +17,7 @@ let playerTotal = 0
 let dealerTotal = 0
 let playerCards = []
 let dealerCards = []
+let aceCounter = 0
 // 
 // events 
 hitMeBtn.addEventListener('click', ()=>{
@@ -24,7 +25,10 @@ hitMeBtn.addEventListener('click', ()=>{
     let card = playerCards.length -1
     player.innerHTML += createHtml(playerCards[card])
     playerTotal += playerCards[card].cardValue
-    playerSum.innerHTML = 'Player total: ' + playerTotal
+    aceCheck(playerCards[card])
+    playerTotal = aceHndler(playerTotal,aceCounter)
+    playerSum.innerHTML = 'Player total: ' + playerTotal 
+    console.log(aceCounter)
 })
 
 window.onload = startGame()
@@ -38,6 +42,7 @@ function startGame(){
     for (let i=0; i<playerCards.length; i++){
         player.innerHTML += createHtml(playerCards[i])
         playerTotal += playerCards[i].cardValue
+        aceCheck(playerCards[i])
     }
     dealer.innerHTML = `<img src="./deck/back_black.png" id="hidden"/>` + createHtml(dealerCards[0])
     dealerTotal = dealerCards[0].cardValue
@@ -80,6 +85,21 @@ function drawCard(deck){
 function createHtml(card){
     let html = `<img src="${card.imgUrl}"/>`
     return html
+}
+function aceCheck(card){
+    if (card.cardValue === 11){
+        aceCounter++
+    }
+}
+function aceHndler(total,ace){
+    if(total>21 && ace>0){
+        total -= 10
+        aceCounter--
+        return total
+    }else{
+        return total
+    }
+    
 }
 // 
 // 
