@@ -14,17 +14,19 @@ let playerObj = {
     sumId: document.getElementById('player-sum'),
     name: 'Player',
     cards:[],
-    total: 0
+    total: 0,
+    win: false
 }
 let dealerObj = {
     id: document.getElementById('dealer'),
     sumId: document.getElementById('dealer-sum'),
     name: 'Dealer',
     cards:[],
-    total: 0
+    total: 0,
+    win: false
 }
 let aceCounter = 0
-let win = false
+
 let lose = false
 // 
 // events
@@ -32,9 +34,19 @@ window.onload = startGame()
 
 hitMeBtn.addEventListener('click', ()=>{
     renderCard(playerObj)
+    if (totalCheck()){
+        hitMeBtn.disabled = true
+        newGameBtn.disabled = false
+        stayBtn.disabled = true
+    }
 })
 stayBtn.addEventListener('click', ()=>{
     dealersTurn()
+    hitMeBtn.disabled = true
+    newGameBtn.disabled = false
+})
+newGameBtn.addEventListener('click', ()=>{
+    startGame()
 })
 // 
 // functions 
@@ -48,8 +60,8 @@ function startGame(){
         playerObj.total += playerObj.cards[i].cardValue
         aceCheck(playerObj.cards[i])
     }
-    totalCheck(playerObj.total)
-    console.log(win,lose)
+    totalCheck()
+    console.log(playerObj.win,lose)
     dealerObj.id.innerHTML = `<img src="./deck/back_black.png" id="hidden"/>` + createHtml(dealerObj.cards[1])
     dealerObj.total = dealerObj.cards[1].cardValue
     playerObj.sumId.innerHTML += playerObj.total
@@ -95,8 +107,8 @@ function renderCard(player){
     player.total += player.cards[card].cardValue
     aceCheck(player.cards[card])
     player.total = aceHandler(player.total,aceCounter)
-    totalCheck(player.total)
-    console.log(win,lose)
+    totalCheck()
+    console.log(playerObj.win,lose)
     player.sumId.innerHTML = player.name + ' total: ' + player.total 
 }
 function createHtml(card){
@@ -117,10 +129,10 @@ function aceHandler(total,ace){
         return total
     }  
 }
-function totalCheck(playerTotal){
-    if(playerTotal === 21){
-        return win = true
-    }else if(playerTotal > 21 ){
+function totalCheck(){
+    if(playerObj.total === 21){
+        return playerObj.win = true
+    }else if(playerObj.total > 21 ){
         return lose = true
     }
 }
@@ -136,6 +148,9 @@ function dealersTurn(){
     dealerObj.sumId.innerHTML += dealerObj.total
     while(dealerObj.total < playerObj.total && dealerObj.total <= 21){
         renderCard(dealerObj)
-   }    
+   }  
+   if (dealerObj.total >= playerObj.total && dealerObj.total <= 21){
+        dealerObj.win = true
+   }  
 }
 
