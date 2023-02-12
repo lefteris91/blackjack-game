@@ -34,19 +34,33 @@ window.onload = startGame()
 
 hitMeBtn.addEventListener('click', ()=>{
     renderCard(playerObj)
-    if (totalCheck()){
+    
+    if (playerObj.win){
         hitMeBtn.disabled = true
         newGameBtn.disabled = false
         stayBtn.disabled = true
+        playerObj.sumId.style.color = "green"
+    }else if (lose){
+        hitMeBtn.disabled = true
+        newGameBtn.disabled = false
+        stayBtn.disabled = true
+        playerObj.sumId.style.color = "red"
     }
+    
 })
 stayBtn.addEventListener('click', ()=>{
     dealersTurn()
     hitMeBtn.disabled = true
     newGameBtn.disabled = false
+    if(dealerObj.win){
+        dealerObj.sumId.style.color = "green"
+    }else{
+        dealerObj.sumId.style.color = "red"
+    }
 })
 newGameBtn.addEventListener('click', ()=>{
-    startGame()
+    newGame()
+    console.log(playerObj.win)
 })
 // 
 // functions 
@@ -66,6 +80,25 @@ function startGame(){
     dealerObj.total = dealerObj.cards[1].cardValue
     playerObj.sumId.innerHTML += playerObj.total
     dealerObj.sumId.innerHTML += dealerObj.total
+    newGameBtn.disabled = true
+    hitMeBtn.disabled = false
+    stayBtn.disabled =false
+}
+function newGame(){
+    playerObj.cards = []
+    dealerObj.cards = []
+    playerObj.total = 0
+    dealerObj.total = 0
+    playerObj.win = false
+    dealerObj.win = false
+    playerObj.id.innerHTML = ''
+    dealerObj.id.innerHTML = ''
+    playerObj.sumId.innerHTML = 'Player total:'
+    dealerObj.sumId.innerHTML = 'Dealer total:'
+    playerObj.sumId.style.color = "goldenrod"
+    dealerObj.sumId.style.color = "goldenrod"
+    lose = false
+    startGame()
 }
 function deckConstructor (num,type){
     let deck=[]
@@ -108,7 +141,7 @@ function renderCard(player){
     aceCheck(player.cards[card])
     player.total = aceHandler(player.total,aceCounter)
     totalCheck()
-    console.log(playerObj.win,lose)
+    
     player.sumId.innerHTML = player.name + ' total: ' + player.total 
 }
 function createHtml(card){
@@ -137,6 +170,7 @@ function totalCheck(){
     }
 }
 function dealersTurn(){
+      stayBtn.disabled = true
       dealerObj.id.innerHTML = ''
       dealerObj.sumId.innerHTML ='Dealer total: '
       dealerObj.total = 0
